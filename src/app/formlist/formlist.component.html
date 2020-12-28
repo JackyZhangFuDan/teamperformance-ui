@@ -1,0 +1,24 @@
+<nz-layout>
+    <nz-header>
+      <h1 style="color:white;">{{title}}</h1>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <nz-list nzGrid>
+            <div nz-row [nzGutter]="16">
+                <div nz-col [nzXXl]="8" [nzXl]="4" [nzLg]="6" [nzMd]="6" [nzSm]="12" [nzXs]="24" *ngFor="let item of formList">
+                <nz-list-item>
+                    <nz-card [nzTitle]="item.name" nzHoverable (click)="openForm(item.id)" style="background: #d6fafc; padding:30px;">
+                        点击领取。请每个同事拿一份反馈表，一人多份会造成其他同事无表可用
+                    </nz-card>
+                </nz-list-item>
+                </div>
+            </div>
+            <div *ngIf="noAvailableForm">
+              <nz-list-empty [nzNoResult]="emptyPrompt"></nz-list-empty>
+            </div>
+        </nz-list>
+      </div>
+    </nz-content>
+    <nz-footer>SAP CALM Build Shanghai 2020</nz-footer>
+  </nz-layout>

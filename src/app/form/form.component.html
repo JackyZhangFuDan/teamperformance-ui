@@ -1,0 +1,165 @@
+<nz-layout>
+    <nz-header>
+      <h1 style="color:white;">{{title}}</h1>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <nz-spin [nzSpinning]="isLoading">
+        <!-- 开发人员反馈表-->
+        <nz-table #basicTable [nzSize]="30" [nzShowPagination]="false" [nzData]="devEvaluationsUI">
+            <thead>
+              <tr>
+                <th nzWidth="5%">Developer</th>
+                <th nzWidth="10%">工作效率</th>
+                <th nzWidth="10%">产出质量</th>
+                <th nzWidth="10%">产出数量</th>
+                <th nzWidth="10%">承担任务主动性</th>
+                <th nzWidth="10%">对产品/业务/项目运作理解程度<a nz-icon [nzType]="'question-circle'" (click)="showInfo('business')"></a></th>
+                <th nzWidth="10%">讨论参与度<a nz-icon [nzType]="'question-circle'" (click)="showInfo('joindiscuss')"></a></th>
+                <th nzWidth="10%">团队精神，顾全大局<a nz-icon [nzType]="'question-circle'" (click)="showInfo('teamwork')"></a></th>
+                <th nzWidth="20%">与她/他合作高效，顺畅，令人愉快<a nz-icon [nzType]="'question-circle'" (click)="showInfo('cooperatewithhappyness')"></a></th>
+                <th nzWidth="5%">有话说</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let data of basicTable.data">
+              <tr>
+                <td>{{data.employeeName}}</td>
+                <td><nz-rate [(ngModel)]="data.speed" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('speed',data,$event)"></nz-rate><span *ngIf="data.speed" class="ant-rate-text">{{ data.speed}}</span></td>
+                <td><nz-rate [(ngModel)]="data.quality" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('quality',data,$event)"></nz-rate><span *ngIf="data.quality" class="ant-rate-text">{{ data.quality }}</span></td>
+                <td><nz-rate [(ngModel)]="data.quantity" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('quantity',data,$event)"></nz-rate><span *ngIf="data.quantity" class="ant-rate-text">{{ data.quantity }}</span></td>
+                <td><nz-rate [(ngModel)]="data.activeness" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('activeness',data,$event)"></nz-rate><span *ngIf="data.activeness" class="ant-rate-text">{{ data.activeness }}</span></td>
+                <td><nz-rate [(ngModel)]="data.business" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('business',data,$event)"></nz-rate><span *ngIf="data.business" class="ant-rate-text">{{ data.business }}</span></td>
+                <td><nz-rate [(ngModel)]="data.joindiscuss" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('joindiscuss',data,$event)"></nz-rate><span *ngIf="data.joindiscuss" class="ant-rate-text">{{ data.joindiscuss }}</span></td>
+                <td><nz-rate [(ngModel)]="data.teamwork" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('teamwork',data,$event)"></nz-rate><span *ngIf="data.teamwork" class="ant-rate-text">{{ data.teamwork }}</span></td>
+                <td><nz-rate [(ngModel)]="data.cooperatewithhappyness" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('cooperatewithhappyness',data,$event)"></nz-rate><span *ngIf="data.cooperatewithhappyness" class="ant-rate-text">{{ data.cooperatewithhappyness }}</span></td>
+          
+                <td [(nzExpand)]="data.expend" (nzExpandChange)="onExpandChange(data, $event)"></td>
+              </tr>
+              <tr [nzExpand]="data.expend">
+                <nz-textarea-count [nzMaxCharacterCount]="1000">
+                    <textarea [(ngModel)]="data.comment" rows="6" nz-input placeholder="例如：某项突出贡献/不好表现；你看到的特别闪光点；某些方面辜负团队期待；他/她不可或缺因为......"></textarea>
+                </nz-textarea-count>
+              </tr>
+              </ng-container>
+            </tbody>
+        </nz-table>
+
+        <!-- 测试人员反馈表-->
+        <nz-table #basicTable1 [nzSize]="30" [nzShowPagination]="false" [nzData]="qaEvaluationsUI">
+          <thead>
+            <tr>
+              <th nzWidth="5%">QA / UX</th>
+              <th nzWidth="10%">工作效率</th>
+              <th nzWidth="20%">工作负荷(6星代表100%)<a nz-icon [nzType]="'question-circle'" (click)="showInfo('workload')"></a></th>
+              <th nzWidth="10%">承担任务主动性</th>
+              <th nzWidth="10%">对产品/业务/项目运作理解程度<a nz-icon [nzType]="'question-circle'" (click)="showInfo('business')"></a></th>
+              <th nzWidth="10%">讨论参与度<a nz-icon [nzType]="'question-circle'" (click)="showInfo('joindiscuss')"></a></th>
+              <th nzWidth="10%">团队精神，顾全大局<a nz-icon [nzType]="'question-circle'" (click)="showInfo('teamwork')"></a></th>
+              <th nzWidth="20%">与她/他合作高效，顺畅，令人愉快<a nz-icon [nzType]="'question-circle'" (click)="showInfo('cooperatewithhappyness')"></a></th>
+              <th nzWidth="5%">有话说</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let data of basicTable1.data">
+            <tr>
+              <td>{{data.employeeName}}</td>
+              <td><nz-rate [(ngModel)]="data.speed" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('speed',data,$event)"></nz-rate><span *ngIf="data.speed" class="ant-rate-text">{{ data.speed }}</span></td>
+              <td><nz-rate [(ngModel)]="data.workload" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('workload',data,$event)"></nz-rate><span *ngIf="data.workload" class="ant-rate-text">{{ data.workload }}</span></td>
+              <td><nz-rate [(ngModel)]="data.activeness" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('activeness',data,$event)"></nz-rate><span *ngIf="data.activeness" class="ant-rate-text">{{ data.activeness }}</span></td>
+              <td><nz-rate [(ngModel)]="data.business" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('business',data,$event)"></nz-rate><span *ngIf="data.business" class="ant-rate-text">{{ data.business }}</span></td>
+              <td><nz-rate [(ngModel)]="data.joindiscuss" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('joindiscuss',data,$event)"></nz-rate><span *ngIf="data.joindiscuss" class="ant-rate-text">{{ data.joindiscuss }}</span></td>
+              <td><nz-rate [(ngModel)]="data.teamwork" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('teamwork',data,$event)"></nz-rate><span *ngIf="data.teamwork" class="ant-rate-text">{{ data.teamwork }}</span></td>
+              <td><nz-rate [(ngModel)]="data.cooperatewithhappyness" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('cooperatewithhappyness',data,$event)"></nz-rate><span *ngIf="data.cooperatewithhappyness" class="ant-rate-text">{{ data.cooperatewithhappyness }}</span></td>
+              <td [(nzExpand)]="data.expend"  (nzExpandChange)="onExpandChange(data, $event)"></td>
+            </tr>
+            <tr [nzExpand]="data.expend" (nzExpandChange)="onExpandChange(data, $event)">
+              <nz-textarea-count [nzMaxCharacterCount]="1000">
+                  <textarea [(ngModel)]="data.comment" rows="6" nz-input placeholder="例如：某项突出贡献/不好表现；你看到的特别闪光点；某些方面辜负团队期待；他/她不可或缺因为......"></textarea>
+              </nz-textarea-count>
+            </tr>
+            </ng-container>
+          </tbody>
+        </nz-table>
+
+        <!-- SM反馈表-->
+        <nz-table #basicTable2 [nzSize]="30" [nzShowPagination]="false" [nzData]="smEvaluationsUI">
+          <thead>
+            <tr>
+              <th nzWidth="5%">Scrum Master</th>
+              <th nzWidth="10%">工作效率</th>
+              <th nzWidth="10%">工作负荷(6星代表100%)<a nz-icon [nzType]="'question-circle'" (click)="showInfo('workload')"></a></th>
+              <th nzWidth="10%">Scrum管理工作全面性<a nz-icon [nzType]="'question-circle'" (click)="showInfo('scrum')"></a></th>
+              <th nzWidth="10%">主动协调，促使Sprint目标达成<a nz-icon [nzType]="'question-circle'" (click)="showInfo('activecoordinate')"></a></th>
+              <th nzWidth="10%">对产品/业务/项目运作理解程度<a nz-icon [nzType]="'question-circle'" (click)="showInfo('business')"></a></th>
+              <th nzWidth="10%">讨论参与度<a nz-icon [nzType]="'question-circle'" (click)="showInfo('joindiscuss')"></a></th>
+              <th nzWidth="10%">团队精神，顾全大局<a nz-icon [nzType]="'question-circle'" (click)="showInfo('teamwork')"></a></th>
+              <th nzWidth="20%">与她/他合作高效，顺畅，令人愉快<a nz-icon [nzType]="'question-circle'" (click)="showInfo('cooperatewithhappyness')"></a></th>
+              <th nzWidth="5%">有话说</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let data of basicTable2.data">
+            <tr>
+              <td>{{data.employeeName}}</td>
+              <td><nz-rate [(ngModel)]="data.speed" [nzCount]="10" [nzTooltips]="rateTooltips" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('speed',data,$event)"></nz-rate><span *ngIf="data.speed" class="ant-rate-text">{{ data.speed }}</span></td>
+              <td><nz-rate [(ngModel)]="data.workload" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('workload',data,$event)"></nz-rate><span *ngIf="data.workload" class="ant-rate-text">{{ data.workload }}</span></td>
+              <td><nz-rate [(ngModel)]="data.scrum" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('scrum',data,$event)"></nz-rate><span *ngIf="data.scrum" class="ant-rate-text">{{ data.scrum }}</span></td>
+              <td><nz-rate [(ngModel)]="data.activecoordinate" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('activecoordinate',data,$event)"></nz-rate><span *ngIf="data.activecoordinate" class="ant-rate-text">{{ data.activecoordinate }}</span></td>
+              <td><nz-rate [(ngModel)]="data.business" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('business',data,$event)"></nz-rate><span *ngIf="data.business" class="ant-rate-text">{{ data.business }}</span></td>
+              <td><nz-rate [(ngModel)]="data.joindiscuss" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('joindiscuss',data,$event)"></nz-rate><span *ngIf="data.joindiscuss" class="ant-rate-text">{{ data.joindiscuss }}</span></td>
+              <td><nz-rate [(ngModel)]="data.teamwork" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('teamwork',data,$event)"></nz-rate><span *ngIf="data.teamwork" class="ant-rate-text">{{ data.teamwork }}</span></td>
+              <td><nz-rate [(ngModel)]="data.cooperatewithhappyness" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('cooperatewithhappyness',data,$event)"></nz-rate><span *ngIf="data.cooperatewithhappyness" class="ant-rate-text">{{ data.cooperatewithhappyness }}</span></td>
+              <td [(nzExpand)]="data.expend" (nzExpandChange)="onExpandChange(data, $event)"></td>
+            </tr>
+            <tr [nzExpand]="data.expend" (nzExpandChange)="onExpandChange(data, $event)">
+              <nz-textarea-count [nzMaxCharacterCount]="1000">
+                  <textarea [(ngModel)]="data.comment" rows="6" nz-input placeholder="例如：某项突出贡献/不好表现；你看到的特别闪光点；某些方面辜负团队期待；他/她不可或缺因为......"></textarea>
+              </nz-textarea-count>
+            </tr>
+            </ng-container>
+          </tbody>
+        </nz-table>
+
+        <!-- PO反馈表-->
+        <nz-table #basicTable3 [nzSize]="30" [nzShowPagination]="false" [nzData]="poEvaluationsUI">
+          <thead>
+            <tr>
+              <th nzWidth="5%">Product Owner</th>
+              <th nzWidth="10%">工作效率</th>
+              <th nzWidth="10%">工作负荷(6星代表100%)<a nz-icon [nzType]="'question-circle'" (click)="showInfo('workload')"></a></th>
+              <th nzWidth="20%">需求管理专业度(收集，描述，验收)<a nz-icon [nzType]="'question-circle'" (click)="showInfo('requirement')"></a></th>
+              <th nzWidth="10%">对产品/业务/项目运作理解程度<a nz-icon [nzType]="'question-circle'" (click)="showInfo('business')"></a></th>
+              <th nzWidth="10%">讨论参与度<a nz-icon [nzType]="'question-circle'" (click)="showInfo('joindiscuss')"></a></th>
+              <th nzWidth="10%">团队精神，顾全大局<a nz-icon [nzType]="'question-circle'" (click)="showInfo('teamwork')"></a></th>
+              <th nzWidth="20%">与她/他合作高效，顺畅，令人愉快<a nz-icon [nzType]="'question-circle'" (click)="showInfo('cooperatewithhappyness')"></a></th>
+              <th nzWidth="5%">有话说</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let data of basicTable3.data">
+            <tr>
+              <td>{{data.employeeName}}</td>
+              <td><nz-rate [(ngModel)]="data.speed" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('speed',data,$event)"></nz-rate><span *ngIf="data.speed" class="ant-rate-text">{{ data.speed }}</span></td>
+              <td><nz-rate [(ngModel)]="data.workload" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('workload',data,$event)"></nz-rate><span *ngIf="data.workload" class="ant-rate-text">{{ data.workload }}</span></td>
+              <td><nz-rate [(ngModel)]="data.requirement" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('requirement',data,$event)"></nz-rate><span *ngIf="data.requirement" class="ant-rate-text">{{ data.requirement }}</span></td>
+              <td><nz-rate [(ngModel)]="data.business" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('business',data,$event)"></nz-rate><span *ngIf="data.business" class="ant-rate-text">{{ data.business }}</span></td>
+              <td><nz-rate [(ngModel)]="data.joindiscuss" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('joindiscuss',data,$event)"></nz-rate><span *ngIf="data.joindiscuss" class="ant-rate-text">{{ data.joindiscuss }}</span></td>
+              <td><nz-rate [(ngModel)]="data.teamwork" [nzCount]="10" [nzTooltips]="rateTooltips" nzAllowHalf (click)="onRating('teamwork',data,$event)"></nz-rate><span *ngIf="data.teamwork" class="ant-rate-text">{{ data.teamwork }}</span></td>
+              <td><nz-rate [(ngModel)]="data.cooperatewithhappyness" [nzTooltips]="rateTooltips" [nzCount]="10" nzAllowHalf (click)="onRating('cooperatewithhappyness',data,$event)"></nz-rate><span *ngIf="data.cooperatewithhappyness" class="ant-rate-text">{{ data.cooperatewithhappyness }}</span></td>
+              <td [(nzExpand)]="data.expend" (nzExpandChange)="onExpandChange(data, $event)"></td>
+            </tr>
+            <tr [nzExpand]="data.expend" (nzExpandChange)="onExpandChange(data, $event)">
+              <nz-textarea-count [nzMaxCharacterCount]="1000">
+                  <textarea [(ngModel)]="data.comment" rows="6" nz-input placeholder="例如：某项突出贡献/不好表现；你看到的特别闪光点；某些方面辜负团队期待；他/她不可或缺因为......"></textarea>
+              </nz-textarea-count>
+            </tr>
+            </ng-container>
+          </tbody>
+        </nz-table>
+        </nz-spin>
+      </div>
+    </nz-content>
+    <nz-footer>SAP CALM Build Shanghai 2020</nz-footer>
+
+  </nz-layout>
