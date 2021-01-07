@@ -4,8 +4,9 @@ import { InMemoryDbService, RequestInfo, ParsedRequestUrl, RequestInfoUtilities,
 import { Observable, of }  from 'rxjs';
 import { delay } from 'rxjs/operators';
 
-import { Form, Employee, Rating, Comment} from './evaluation'
+import { Form, Employee, Rating, Comment, RatingCount, MyRating} from './evaluation'
 import { getAttrsForDirectiveMatching } from '@angular/compiler/src/render3/view/util';
+import { MyratingComponent } from '../myrating/myrating.component';
 
 @Injectable({
   providedIn: 'root'
@@ -181,7 +182,55 @@ export class InMemoryDataService implements InMemoryDbService {
               };
               return this.finishOptions(options, reqInfo);
           });
-          break;
+
+        case ('myrating'): //读取某个人获得的rating
+          let result:MyRating = {employeeId:reqInfo.id, employeeName: "", employeeRole:'',ratingCounts:null,comments:null};
+          let ratingCnts : RatingCount[] = [];
+          let cmnts : string[] = [];
+          let role : string;
+
+          this.employees.forEach(emp => {
+            if(emp.id === reqInfo.id){
+              role = emp.role;
+              result.employeeName = emp.name;
+            }
+          });
+
+          if(role === null) return null;
+          result.employeeRole = role;
+
+          this.ratings.forEach(aRating => {
+            if(aRating.employeeId === reqInfo.id && aRating.role === role){
+              let find = false;
+              ratingCnts.forEach(cnt => {
+                if(cnt.ratingItem === aRating.ratingItem && cnt.rating === aRating.rating){
+                  cnt.count = cnt.count + 1;
+                  find = true;
+                }
+              });
+              if(find == false){
+                let cnt : RatingCount = {ratingItem: aRating.ratingItem, rating: aRating.rating, count: 1};
+                ratingCnts.push(cnt);
+              }
+            }
+          });
+          result.ratingCounts = ratingCnts;
+
+          this.comments.forEach(aComment => {
+            if(aComment.employeeId === reqInfo.id && aComment.role === role){
+              cmnts.push(aComment.comment);
+            }
+          });
+          result.comments = cmnts;
+          
+          return reqInfo.utils.createResponse$(() => {
+            const options: ResponseOptions =
+              {
+                body: result,
+                status: STATUS.OK
+              } ;
+            return this.finishOptions(options, reqInfo);
+          });
       }
     }
     return undefined; // let the default GET handle all others

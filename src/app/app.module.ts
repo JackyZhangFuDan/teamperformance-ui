@@ -31,6 +31,7 @@ import { FormComponent } from './form/form.component';
 import { FormlistComponent } from './formlist/formlist.component';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './util/in-memory-data.service';
+import { MyratingComponent } from './myrating/myrating.component';
 
 registerLocaleData(zh);
 
@@ -38,7 +39,8 @@ registerLocaleData(zh);
   declarations: [
     AppComponent,
     FormComponent,
-    FormlistComponent
+    FormlistComponent,
+    MyratingComponent
   ],
   
   imports: [

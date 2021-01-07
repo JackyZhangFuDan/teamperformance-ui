@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {Form, Employee, Rating, Comment} from './evaluation';
+import {Form, Employee, Rating, Comment, MyRating,RatingAverage} from './evaluation';
 
 const cudOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' })};
 
@@ -46,5 +46,19 @@ export class DataserviceService {
   comment(formKey:string, employeeId:string, employeeRole:string, comments:string):Observable<string>{
     let body : Comment = {formKey: formKey, employeeId:employeeId, role: employeeRole, comment: comments};
     return this.http.post<string>(serviceHost + `/formapi/comment/${formKey}`, body, cudOptions);
+  }
+
+  //读取某个人获得的评分信息
+  readMyRating(employeeGuid:string) : Observable<MyRating> {
+    return this.http.get<MyRating>(serviceHost + `/formapi/myrating/${employeeGuid}`);
+  }
+
+  //读取某角色某年度的平均评分信息
+  async readRoleAverageRating(role:string, year:number) : Promise<RatingAverage[]> {
+    return await new Promise<RatingAverage[]> ( (resolve) => {
+      this.http.get<RatingAverage[]>(serviceHost + `/formapi/ratingaverage/${role}-${year}`).subscribe( (ras:RatingAverage[]) => {
+        resolve(ras);
+      } );
+    });
   }
 }

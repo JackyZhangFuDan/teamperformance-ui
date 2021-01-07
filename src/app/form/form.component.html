@@ -6,7 +6,7 @@
       <div class="inner-content">
         <nz-spin [nzSpinning]="isLoading">
         <!-- 开发人员反馈表-->
-        <nz-table #basicTable [nzSize]="30" [nzShowPagination]="false" [nzData]="devEvaluationsUI">
+        <nz-table #basicTable [nzPageSize]="30" [nzShowPagination]="false" [nzData]="devEvaluationsUI">
             <thead>
               <tr>
                 <th nzWidth="5%">Developer</th>
@@ -46,7 +46,7 @@
         </nz-table>
 
         <!-- 测试人员反馈表-->
-        <nz-table #basicTable1 [nzSize]="30" [nzShowPagination]="false" [nzData]="qaEvaluationsUI">
+        <nz-table #basicTable1 [nzPageSize]="30" [nzShowPagination]="false" [nzData]="qaEvaluationsUI">
           <thead>
             <tr>
               <th nzWidth="5%">QA / UX</th>
@@ -83,7 +83,7 @@
         </nz-table>
 
         <!-- SM反馈表-->
-        <nz-table #basicTable2 [nzSize]="30" [nzShowPagination]="false" [nzData]="smEvaluationsUI">
+        <nz-table #basicTable2 [nzPageSize]="30" [nzShowPagination]="false" [nzData]="smEvaluationsUI">
           <thead>
             <tr>
               <th nzWidth="5%">Scrum Master</th>
@@ -122,7 +122,7 @@
         </nz-table>
 
         <!-- PO反馈表-->
-        <nz-table #basicTable3 [nzSize]="30" [nzShowPagination]="false" [nzData]="poEvaluationsUI">
+        <nz-table #basicTable3 [nzPageSize]="30" [nzShowPagination]="false" [nzData]="poEvaluationsUI">
           <thead>
             <tr>
               <th nzWidth="5%">Product Owner</th>

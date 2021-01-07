@@ -1,0 +1,73 @@
+<nz-layout>
+    <nz-header>
+      <h1 style="color:white;">{{title}}</h1>
+    </nz-header>
+    <nz-content>
+        <div class="inner-content">
+            <nz-table #basicTable nzBordered [nzPageSize]="30" [nzShowPagination]="false" [nzData]="myRatingsUI">
+                <thead>
+                  <tr>
+                    <th nzWidth="10%">项目</th>
+                    <th>同Role平均值</th>
+                    <th>平均值</th>
+                    <th>10 Star</th>
+                    <th>9.5 Star</th>
+                    <th>9 Star</th>
+                    <th>8.5 Star</th>
+                    <th>8 Star</th>
+                    <th>7.5 Star</th>
+                    <th>7 Star</th>
+                    <th>6.5 Star</th>
+                    <th>6 Star</th>
+                    <th>5.5 Star</th>
+                    <th>5 Star</th>
+                    <th>4.5 Star</th>
+                    <th>4 Star</th>
+                    <th>3.5 Star</th>
+                    <th>3 Star</th>
+                    <th>2.5 Star</th>
+                    <th>2 Star</th>
+                    <th>1.5 Star</th>
+                    <th>1 Star</th>
+                    <th >0.5 Star</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let data of basicTable.data">
+                        <tr>
+                          <td>{{data.ratingItem}}</td>
+                          <td>{{data.roleAverage}}</td>
+                          <td>{{data.average.toFixed(2)}}</td>
+                          <td>{{data.ten}}</td>
+                          <td>{{data.ninehalf}}</td>
+                          <td>{{data.nine}}</td>
+                          <td>{{data.eighthalf}}</td>
+                          <td>{{data.eight}}</td>
+                          <td>{{data.sevenhalf}}</td>
+                          <td>{{data.seven}}</td>
+                          <td>{{data.sixhalf}}</td>
+                          <td>{{data.six}}</td>
+                          <td>{{data.fivehalf}}</td>
+                          <td>{{data.five}}</td>
+                          <td>{{data.fourhalf}}</td>
+                          <td>{{data.four}}</td>
+                          <td>{{data.threehalf}}</td>
+                          <td>{{data.three}}</td>
+                          <td>{{data.twohalf}}</td>
+                          <td>{{data.two}}</td>
+                          <td>{{data.onehalf}}</td>
+                          <td>{{data.one}}</td>
+                          <td>{{data.half}}</td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </nz-table>
+            
+            <nz-list nzBordered nzSize="small" *ngIf="myRatings.comments.length > 0" >
+                <nz-list-header>文字反馈</nz-list-header>
+                <nz-list-item *ngFor="let comment of myRatings.comments">{{comment}}</nz-list-item>
+            </nz-list>
+            
+        </div>
+    </nz-content>
+</nz-layout>
