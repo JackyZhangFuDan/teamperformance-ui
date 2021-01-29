@@ -17,6 +17,19 @@ export class MyratingComponent implements OnInit {
 
   title : string = "";
   myRatingsUI = [];
+  commentsUI = [];
+  tableColumnSortSettings = [
+    {
+      sortOrder: 'ascend',
+      sortFn: (a, b) => a.ratingItem.localeCompare(b.ratingItem),
+      sortDirections: ['ascend', 'descend', null]
+    },
+    {
+      sortOrder: null,
+      sortFn: (a, b) => a.average > b.average,
+      sortDirections: ['ascend', 'descend', null]
+    }
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -40,12 +53,14 @@ export class MyratingComponent implements OnInit {
 
   loadMyRating(empGuid : string) : void {
     this.myRatingsUI = [];
+    this.commentsUI = [];
     this.title = "";
     let that = this;
 
     this.dataService.readMyRating(empGuid).subscribe(rts => {
       this.myRatings = rts;
-      //再去要平均数，要到后为UI组织信息
+
+      //for rating: 再去要平均数，要到后为UI组织信息
       this.dataService.readRoleAverageRating(this.myRatings.employeeRole, 2020).then((ratingAverages : RatingAverage[]) => {
         that.title = `CALM Build Project & Service Dev Team Peer Feedback Form - 2020 - ${this.myRatings.employeeName} (${this.myRatings.employeeId})`; 
         that.ratingAverage = ratingAverages;
@@ -54,6 +69,8 @@ export class MyratingComponent implements OnInit {
         that.translateRatingItemForUI();
       });
 
+      //for comment: 为UI组织信息
+      this.commentsUI = rts.comments;
     },
     error => {
       console.error(`error when read my ratings ${error}`);
@@ -152,10 +169,13 @@ export class MyratingComponent implements OnInit {
 
       if(theRatingUI == null){
         theRatingUI = {ratingItem:myRating.ratingItem}
-        //新项目肯定要有平均数的
+        //新项目肯定要有本角色平均数的
         this.ratingAverage.forEach(average => {
           if(average.role === this.myRatings.employeeRole && average.item === theRatingUI.ratingItem){
-            theRatingUI.roleAverage = average.average;
+            if(average.role !== 'qa') //今年qa人只有2个，那我们就不显示平均值了
+              theRatingUI.roleAverage = average.average;
+            else
+              theRatingUI.roleAverage = '0.0';
           }
         });
         ratingUI.push(theRatingUI);

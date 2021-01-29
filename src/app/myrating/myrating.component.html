@@ -7,9 +7,9 @@
             <nz-table #basicTable nzBordered [nzPageSize]="30" [nzShowPagination]="false" [nzData]="myRatingsUI">
                 <thead>
                   <tr>
-                    <th nzWidth="10%">项目</th>
+                    <th nzWidth="10%" [nzSortFn]="tableColumnSortSettings[0].sortFn" [nzSortOrder]="tableColumnSortSettings[0].sortOrder" [nzSortDirections]="tableColumnSortSettings[0].sortDirections">项目</th>
                     <th>同Role平均值</th>
-                    <th>平均值</th>
+                    <th [nzSortFn]="tableColumnSortSettings[1].sortFn" [nzSortOrder]="tableColumnSortSettings[1].sortOrder" [nzSortDirections]="tableColumnSortSettings[1].sortDirections">平均值</th>
                     <th>10 Star</th>
                     <th>9.5 Star</th>
                     <th>9 Star</th>
@@ -62,10 +62,10 @@
                     </ng-container>
                 </tbody>
             </nz-table>
-            
-            <nz-list nzBordered nzSize="small" *ngIf="myRatings.comments.length > 0" >
+            <br>
+            <nz-list nzBordered nzSize="small" *ngIf="commentsUI.length > 0" >
                 <nz-list-header>文字反馈</nz-list-header>
-                <nz-list-item *ngFor="let comment of myRatings.comments">{{comment}}</nz-list-item>
+                <nz-list-item *ngFor="let comment of commentsUI">{{comment}}</nz-list-item>
             </nz-list>
             
         </div>
