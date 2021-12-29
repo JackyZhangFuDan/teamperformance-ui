@@ -28,6 +28,11 @@ export class InMemoryDataService implements InMemoryDbService {
   }];
 
   private employees: Employee[] = [{
+    id:"emp_0",
+    role:"manager", //dev,qa,sm,po,ux
+    name:"Jacky Zhang",
+    status:1 //0:inactive; 1:active
+  },{
     id:"emp_1",
     role:"dev", //dev,qa,sm,po,ux
     name:"Jacky",
@@ -56,6 +61,56 @@ export class InMemoryDataService implements InMemoryDbService {
     id:"emp_6",
     role:"po", //dev,qa,sm,po,ux
     name:"Tony",
+    status:1 //0:inactive; 1:active
+  },{
+    id:"emp_7",
+    role:"dev", //dev,qa,sm,po,ux
+    name:"developer 1",
+    status:1 //0:inactive; 1:active
+  },{
+    id:"emp_8",
+    role:"dev", //dev,qa,sm,po,ux
+    name:"Developer 2",
+    status:1 //0:inactive; 1:active
+  },{
+    id:"emp_9",
+    role:"dev", //dev,qa,sm,po,ux
+    name:"Developer 3",
+    status:1 //0:inactive; 1:active
+  },{
+    id:"emp_10",
+    role:"dev", //dev,qa,sm,po,ux
+    name:"Developer 4",
+    status:1 //0:inactive; 1:active
+  },{
+    id:"emp_11",
+    role:"dev", //dev,qa,sm,po,ux
+    name:"Developer 5",
+    status:1 //0:inactive; 1:active
+  },{
+    id:"emp_12",
+    role:"dev", //dev,qa,sm,po,ux
+    name:"Developer 6",
+    status:1 //0:inactive; 1:active
+  },{
+    id:"emp_13",
+    role:"dev", //dev,qa,sm,po,ux
+    name:"Developer 7",
+    status:1 //0:inactive; 1:active
+  },{
+    id:"emp_14",
+    role:"dev", //dev,qa,sm,po,ux
+    name:"Developer 8",
+    status:1 //0:inactive; 1:active
+  },{
+    id:"emp_15",
+    role:"dev", //dev,qa,sm,po,ux
+    name:"Developer 9",
+    status:1 //0:inactive; 1:active
+  },{
+    id:"emp_16",
+    role:"dev", //dev,qa,sm,po,ux
+    name:"Developer 10",
     status:1 //0:inactive; 1:active
   }];
 

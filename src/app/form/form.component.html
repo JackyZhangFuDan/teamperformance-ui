@@ -5,8 +5,50 @@
     <nz-content>
       <div class="inner-content">
         <nz-spin [nzSpinning]="isLoading">
+          
+        <!-- Manager反馈表-->
+        <nz-table #basicTable4 [nzPageSize]="30" [nzShowPagination]="false" [nzData]="managerEvaluationsUI" >
+          <thead>
+            <tr>
+              <th nzWidth="5%">Manager</th>
+              <th nzWidth="10%">履行工作必备知识<a nz-icon [nzType]="'question-circle'" (click)="showInfo('knowledge')"></a></th>
+              <th nzWidth="10%">人际交往技能<a nz-icon [nzType]="'question-circle'" (click)="showInfo('networking')"></a></th>
+              <th nzWidth="10%">了解如何在SAP成功<a nz-icon [nzType]="'question-circle'" (click)="showInfo('successinsap')"></a></th>
+              <th nzWidth="10%">忠诚<a nz-icon [nzType]="'question-circle'" (click)="showInfo('loyalty')"></a></th>
+              <th nzWidth="10%">开朗<a nz-icon [nzType]="'question-circle'" (click)="showInfo('openess')"></a></th>
+              <th nzWidth="10%">乐于助人<a nz-icon [nzType]="'question-circle'" (click)="showInfo('helpful')"></a></th>
+              <th nzWidth="10%">公平<a nz-icon [nzType]="'question-circle'" (click)="showInfo('fair')"></a></th>
+              <th nzWidth="10%">道德高尚<a nz-icon [nzType]="'question-circle'" (click)="showInfo('morality')"></a></th>
+              <th nzWidth="10%">原则性强<a nz-icon [nzType]="'question-circle'" (click)="showInfo('principle')"></a></th>
+              <th nzWidth="5%">有话说</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let data of basicTable4.data">
+            <tr>
+              <td>{{data.employeeName}}</td>
+              <td><nz-rate [(ngModel)]="data.knowledge" [nzCount]="10" [nzTooltips]="managerRateTooltips" nzAllowHalf (click)="onRating('knowledge',data,$event)"></nz-rate><span *ngIf="data.knowledge" class="ant-rate-text">{{ data.knowledge }}</span></td>
+              <td><nz-rate [(ngModel)]="data.networking" [nzCount]="10" [nzTooltips]="managerRateTooltips" nzAllowHalf (click)="onRating('networking',data,$event)"></nz-rate><span *ngIf="data.networking" class="ant-rate-text">{{ data.networking }}</span></td>
+              <td><nz-rate [(ngModel)]="data.successinsap" [nzCount]="10" [nzTooltips]="managerRateTooltips" nzAllowHalf (click)="onRating('successinsap',data,$event)"></nz-rate><span *ngIf="data.successinsap" class="ant-rate-text">{{ data.successinsap }}</span></td>
+              <td><nz-rate [(ngModel)]="data.loyalty" [nzCount]="10" [nzTooltips]="managerRateTooltips" nzAllowHalf (click)="onRating('loyalty',data,$event)"></nz-rate><span *ngIf="data.loyalty" class="ant-rate-text">{{ data.loyalty }}</span></td>
+              <td><nz-rate [(ngModel)]="data.openess" [nzCount]="10" [nzTooltips]="managerRateTooltips" nzAllowHalf (click)="onRating('openess',data,$event)"></nz-rate><span *ngIf="data.openess" class="ant-rate-text">{{ data.openess }}</span></td>
+              <td><nz-rate [(ngModel)]="data.helpful" [nzCount]="10" [nzTooltips]="managerRateTooltips" nzAllowHalf (click)="onRating('helpful',data,$event)"></nz-rate><span *ngIf="data.helpful" class="ant-rate-text">{{ data.helpful }}</span></td>
+              <td><nz-rate [(ngModel)]="data.fair" [nzCount]="10" [nzTooltips]="managerRateTooltips"  nzAllowHalf (click)="onRating('fair',data,$event)"></nz-rate><span *ngIf="data.fair" class="ant-rate-text">{{ data.fair }}</span></td>
+              <td><nz-rate [(ngModel)]="data.morality" [nzCount]="10" [nzTooltips]="managerRateTooltips" nzAllowHalf (click)="onRating('morality',data,$event)"></nz-rate><span *ngIf="data.morality" class="ant-rate-text">{{ data.morality }}</span></td>
+              <td><nz-rate [(ngModel)]="data.principle" [nzCount]="10" [nzTooltips]="managerRateTooltips" nzAllowHalf (click)="onRating('principle',data,$event)"></nz-rate><span *ngIf="data.principle" class="ant-rate-text">{{ data.principle }}</span></td>
+              <td [(nzExpand)]="data.expend" (nzExpandChange)="onExpandChange(data, $event)"></td>
+            </tr>
+            <tr [nzExpand]="data.expend" (nzExpandChange)="onExpandChange(data, $event)">
+              <nz-textarea-count [nzMaxCharacterCount]="1000">
+                  <textarea [(ngModel)]="data.comment" rows="6" nz-input placeholder="你希望manager在未来半年做出的一些工作方式与内容的调整；你眼中亟待manager解决的管理问题，等等......"></textarea>
+              </nz-textarea-count>
+            </tr>
+            </ng-container>
+          </tbody>
+        </nz-table>
+
         <!-- 开发人员反馈表-->
-        <nz-table #basicTable [nzPageSize]="30" [nzShowPagination]="false" [nzData]="devEvaluationsUI">
+        <nz-table #basicTable [nzPageSize]="30" [nzShowPagination]="false" [nzData]="devEvaluationsUI" [nzScroll]="{y:'800px'}">
             <thead>
               <tr>
                 <th nzWidth="5%">Developer</th>
@@ -46,7 +88,7 @@
         </nz-table>
 
         <!-- 测试人员反馈表-->
-        <nz-table #basicTable1 [nzPageSize]="30" [nzShowPagination]="false" [nzData]="qaEvaluationsUI">
+        <nz-table #basicTable1 [nzPageSize]="30" [nzShowPagination]="false" [nzData]="qaEvaluationsUI"  >
           <thead>
             <tr>
               <th nzWidth="5%">QA / UX</th>
@@ -157,6 +199,7 @@
             </ng-container>
           </tbody>
         </nz-table>
+
         </nz-spin>
       </div>
     </nz-content>

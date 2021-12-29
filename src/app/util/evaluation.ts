@@ -111,3 +111,20 @@ export interface POEvaluation{
     comment:string;
     expend:boolean;
 }
+
+export interface ManagerEvaluation{
+    employeeId: string;
+    employeeName: string;
+    employeeRole: string;
+    knowledge: number;
+    networking: number;
+    successinsap: number;
+    loyalty: number;
+    openess: number;
+    helpful: number;
+    fair: number;
+    morality: number;
+    principle: number;
+    comment: string;
+    expend: boolean;
+}

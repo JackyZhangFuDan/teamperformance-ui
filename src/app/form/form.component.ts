@@ -4,8 +4,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import {DevEvaluation,SMEvaluation,POEvaluation,QAEvaluation, Form, Employee, Rating,Comment} from '../util/evaluation';
-import {DataserviceService} from '../util/dataservice.service';
+import { DevEvaluation,SMEvaluation,POEvaluation,QAEvaluation,ManagerEvaluation, Form, Employee, Rating,Comment} from '../util/evaluation';
+import { DataserviceService} from '../util/dataservice.service';
 import { of, Observable } from 'rxjs';
 
 @Component({
@@ -15,7 +15,7 @@ import { of, Observable } from 'rxjs';
 })
 export class FormComponent implements OnInit {
   
-  title:string = "CALM Build Project & Service Dev Team Peer Feedback Form - 2020";
+  title:string = "CALM Build Project & Service Dev Team Peer Feedback Form";
 
   formKey:string = '';
 
@@ -23,8 +23,10 @@ export class FormComponent implements OnInit {
   qaEvaluationsUI:QAEvaluation[] = [];
   smEvaluationsUI:SMEvaluation[] = [];
   poEvaluationsUI:POEvaluation[] = [];
+  managerEvaluationsUI:ManagerEvaluation[] = [];
 
   rateTooltips = ['较低','较低','较低','较低','较低', '5.5 - 稍低；6 - 正常', '超常','超常','超常', '超常'];
+  managerRateTooltips = ['差评','差评','差评','差评','差评', '差评', '不好不差，弃权','不好不差，弃权','好评', '好评'];
   isLoading : boolean = true;
 
   constructor(
@@ -63,10 +65,18 @@ export class FormComponent implements OnInit {
     //let loadingMsgId = this.message.loading('表格内容下载中..', { nzDuration: 10000 }).messageId;
     this.isLoading = true;
     this.dataService.readForm(this.formKey).subscribe( (theForm:{form:Form; employees:Employee[]; ratings:Rating[]; comments:Comment[]}) => {
+      var compareName = function (emp1: Employee, emp2: Employee) {  
+          if (emp1.name > emp2.name) { return 1; }  
+          if (emp1.name < emp2.name) {return -1; }  
+          return 0;  
+      } 
+      theForm.employees.sort(compareName);
+
       this.devEvaluationsUI = [];
       this.qaEvaluationsUI = [];
       this.smEvaluationsUI = [];
       this.poEvaluationsUI = [];
+      this.managerEvaluationsUI = [];
 
       for(let i = 0; i < theForm.employees.length; i++){
         let emp: Employee = theForm.employees[i];
@@ -244,6 +254,54 @@ export class FormComponent implements OnInit {
               });
             this.poEvaluationsUI.push(evaluPo);
             break;
+          
+            case 'manager':
+              let evaluManager : ManagerEvaluation = {employeeId:"",employeeName:"",employeeRole:"", knowledge:0, networking: 0,successinsap: 0,loyalty: 0,openess: 0,helpful: 0,fair: 0, morality: 0, principle:0, comment:"",expend:false};
+              evaluManager.employeeId = emp.id;
+              evaluManager.employeeName = emp.name;
+              evaluManager.employeeRole = emp.role;
+              evaluManager.expend = false;
+              theForm.ratings.forEach( (rt : Rating) => {
+                if(rt.employeeId === emp.id && rt.role === emp.role){
+                  switch(rt.ratingItem){
+                    case 'knowledge':
+                      evaluManager.knowledge = rt.rating;
+                      break;
+                    case 'networking':
+                      evaluManager.networking = rt.rating;
+                      break;
+                    case 'successinsap':
+                      evaluManager.successinsap = rt.rating;
+                      break;
+                    case 'loyalty':
+                      evaluManager.loyalty = rt.rating;
+                      break;
+                    case 'openess':
+                      evaluManager.openess = rt.rating;
+                      break;
+                    case 'helpful':
+                      evaluManager.helpful = rt.rating;
+                      break;
+                    case 'fair':
+                      evaluManager.fair = rt.rating;
+                      break;
+                    case 'morality':
+                      evaluManager.morality = rt.rating;
+                      break;
+                    case 'principle':
+                      evaluManager.principle = rt.rating;
+                      break;
+                  }
+                }
+              });
+              if (theForm.comments !== null)
+                theForm.comments.forEach((comment:Comment) => {
+                  if(comment.employeeId === emp.id && comment.role === emp.role){
+                    evaluManager.comment = comment.comment;
+                  }
+                });
+              this.managerEvaluationsUI.push(evaluManager);
+              break;
         }
       };
       this.isLoading = false;
@@ -297,6 +355,34 @@ export class FormComponent implements OnInit {
       case 'requirement':
         re = this.dataService.rate(this.formKey, data.employeeId,data.employeeRole, 'requirement', data.requirement);
         break;
+      case 'knowledge':
+        re = this.dataService.rate(this.formKey, data.employeeId,data.employeeRole, 'knowledge', data.knowledge);
+        break;
+      case 'networking':
+        re = this.dataService.rate(this.formKey, data.employeeId,data.employeeRole, 'networking', data.networking);
+        break;
+      case 'successinsap':
+        re = this.dataService.rate(this.formKey, data.employeeId,data.employeeRole, 'successinsap', data.successinsap);
+        break;
+      case 'loyalty':
+        re = this.dataService.rate(this.formKey, data.employeeId,data.employeeRole, 'loyalty', data.loyalty);
+        break;
+      case 'openess':
+        re = this.dataService.rate(this.formKey, data.employeeId,data.employeeRole, 'openess', data.openess);
+        break;
+      case 'helpful':
+        re = this.dataService.rate(this.formKey, data.employeeId,data.employeeRole, 'helpful', data.helpful);
+        break;
+      case 'fair':
+        re = this.dataService.rate(this.formKey, data.employeeId,data.employeeRole, 'fair', data.fair);
+        break;
+      case 'morality':
+        re = this.dataService.rate(this.formKey, data.employeeId,data.employeeRole, 'morality', data.morality);
+        break;
+      case 'principle':
+        re = this.dataService.rate(this.formKey, data.employeeId,data.employeeRole, 'principle', data.principle);
+        break;
+       
     }
     if(re !== null){
       re.subscribe(msg => {
@@ -366,6 +452,33 @@ export class FormComponent implements OnInit {
         break;
       case ("requirement"):
         content = "多渠道，敏感地收集需求，描述需求的完善和准确，响应Team的及时，验收";
+        break;
+      case ("knowledge"):
+        content = "团队所从事工作（软件工程类）的专业知识；人事管理知识";
+        break;
+      case ("networking"):
+        content = "能准确找到各方面资源掌控者解决团队面临的问题，与更高一级管理者和人事部门关系良好且不断深入；能有足够的信息源及时发现对团队有影响的事件或信息";
+        break;
+      case ("successinsap"):
+        content = "了解SAP，知道如何在SAP内取得团队的成功和个人的成功；引导和鼓励（但不强迫）组员做有益于成功的事";
+        break;
+      case ("loyalty"):
+        content = "忠于自己的职责，忠于团队，具有建设发展团队的自驱力；在任何场合维护公司形象和利益，同时能直面问题，坦诚阐明自己观点";
+        break;
+      case ("openess"):
+        content = "为人开朗，乐于和同事交流，愿意主动分享对团队有价值的信息，能够对团队，组员以及自身的不足直言不讳";
+        break;
+      case ("helpful"):
+        content = "真诚不虚伪，提供真正有益的帮助或建议；能坦诚给出自己的建设性意见，不以官话敷衍了事";
+        break;
+      case ("fair"):
+        content = "工作中公平对待组员，使用同样的尺度评定员工表现，保持同样的工作距离，能根据工作成果认定人才";
+        break;
+      case ("morality"):
+        content = "作风正派；无欺骗等行为，待人真诚不虚伪；见解不偏激；促进合作，而不是挑动对立";
+        break;
+      case ("principle"):
+        content = "恪守职业操守，不为短期利益而牺牲团队以及公司利益；能做hard decision，直面冲突不回避";
         break;
     }
     this.modal.info({
